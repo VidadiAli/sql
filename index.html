@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <form action="">
+        <input type="number" id="kod">
+        <input type="number" id="bal">
+    </form>
+
+    <button id="create">create</button>
+    <button id="insert">insert</button>
+
+    <table>
+
+    </table>
+    <script>
+        var db=openDatabase("itemDB", "1.0", "itemDB", 65535);
+        $(function(){
+            $("#create").click(function(){
+                db.transaction(function(transaction){
+                    var sql="CREATE TABLE items1" + "(id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," + "kod1 INT(5) NOT NULL," + "bal1 INT(5) NOT NULL)";
+                    transaction.executeSql(sql,undefined,
+                    function(){
+                        alert("Created");
+                    }, function(){
+                        alert("Table is ready");
+                    }) 
+                });
+            });
+            $("#insert").click(function(){
+                var kod=$("#kod").val();
+                var bal=$("#bal").val();
+                db.transaction(function(transaction){
+                    var sql="INSERT INTO items1(kod1, bal1) VALUES(?, ?)"; 
+                    transaction.executeSql(sql, [kod, bal],function(){
+                        alert("Iserted");
+                    },function(transaction,err){
+                        alert(err.message);
+                    })
+                })
+            })
+        })
+    </script>
+</body>
+</html>
